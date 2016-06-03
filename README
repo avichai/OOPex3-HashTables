@@ -1,0 +1,209 @@
+avichai
+
+maor_i
+
+
+
+=============================
+=      File description     =
+=============================
+
+ChainedHashSet.java -  A class for data structure chainedHashSet that extends SimpleHashSet.
+CollectionFacadeSet.java -  Wraps an underlying Collection and serves to both simplify its API and give 
+							it a common type with the implemented SimpleHashSets.
+Constant.java - class for the constants of this project.
+LinkedListFacadeSet.java - Wraps a linked list collection and serves to both simplify its API and 
+							for the ability to keep an array of linked lists.
+OpenHashSet.java - A class for data structure openHashSet that extends SimpleHashSet.
+SimpleHashSet.java - A superclass for implementations of hash-sets implementing the SimpleSet interface.
+SimpleSetPerformanceAnalyzer.java -  ​A class that has a main method that measures the run-times requested
+ 										in the “Performance Analysis” section. 
+QURESTIONS - The answers of this week questions.
+README - This file
+RESULT - The results of the tests on the different collections.
+
+=============================
+=          Design           =
+=============================
+
+
+=============================
+=  Implementation details   =
+=============================
+
+1. ChainedHashSet - I implemented this data structure by define a wrapper-class (LinkedListFacadeSet)
+					that implements SimpleSet interface and it has-a LinkedList<String> and a 
+					CollectionFacadeSet variable and through that i can do all of the method
+					i need, and  in ChainedHashSet I have an array of LinkedListFacadeSet.
+2.  Implementation of the deletion mechanism in OpenHashSet: First I initialized all cells in the
+					array with empty strings("") by creating new! String object with the value "",
+					and then when i delete i put null inside the cell
+					so in the next time the same hash code will pop it will see:
+					1. null and keep searching 
+					(until he finds and delete or reach an empty string(the object we created) and finish).
+					2. an empty string and then the code check if the cell has a pointer to the object
+					i created (in this case we know no one has added or deleted something from the table)
+					and then we can return because we know the word is not in the table.
+					In the other case it means that the table saved the empty string to it in we keep 
+					on the search.
+					after enough deletes or inserts the array change it's size and all the null
+					cell are gone in the resized array. 
+
+3.The results of the analysis:
+					
+1. For data1.txt: the time it took to initialize each data structure with its words:
+	A. HashSet - the fastest.
+	B. TreeSet
+	C. LinkedList
+	D. ChainedHashSet
+	E. OpenHashSet
+	
+2.  For data2.txt: the time it took to initialize each data structure with its words:
+	A. HashSet - the fastest.
+	B. ChainedHashSet 
+	C. TreeSet 
+	D. OpenHashSet
+	E. LinkedList
+	
+3. For each data structure: the time it took to initialize with the contents of data1.txt compared
+	to the time it took to initialize with data2.txt:
+	
+	A. HashSet_AddData2 is faster then HashSet_AddData1.
+	B. TreeSet_AddData1 is faster then TreeSet_AddData2.
+	C. LinkedList_AddData2 is faster then LinkedList_AddData1.
+	D. ChainedHashSet_AddData2 is faster then ChainedHashSet_AddData1
+	E. OpenHashSet_AddData2 is faster then OpenHashSet_AddData1
+	
+4. Compare the different data structures for contains(”hi”) after data1.txt initialization:
+	A. HashSet - the fastest.
+	B. ChainedHashSet 
+	C. TreeSet 
+	D. LinkedList
+	E. OpenHashSet
+	
+5. Compare the data structures for contains(“-13170890158”) after data1.txt initialization.
+	A. HashSet - the fastest.
+	B. TreeSet
+	C. ChainedHashSet
+	D. LinkedList
+	E. OpenHashSet
+
+6. For each data structure initialized with data1.txt, compare the time it took for the query
+	contains(“hi”) as opposed to “-13170890158”:
+	A. HashSet_Contains_hi1 is faster then HashSet_Contains_negative
+	B. TreeSet_Contains_negative is faster then TreeSet_Contains_hi1
+	C. LinkedList_Contains_negative is faster then LinkedList_Contains_hi1
+	D. ChainedHashSet_Contains_hi1 is faster then ChainedHashSet_Contains_negative
+	E. OpenHashSet_Contains_negative is faster then ChainedHashSet_Contains_hi1
+
+7. Compare the different data structures for contains(”hi”) after data2.txt initialization:
+	A. ChainedHashSet - the fastest.
+	B. HashSet
+	C. TreeSet
+	D. OpenHashSet
+	E. LinkedList
+
+8. Compare the data structures for contains(“23”) after data2.txt initialization.
+	A. OpenHashSet - the fastest.
+	B. ChainedHashSet 
+	C. HashSet 
+	D. LinkedList 
+	E. TreeSet
+
+9.  For each data structure initialized with data2.txt, compare the time it took for the query
+	contains(“hi”) as opposed to (“23”):
+	A. HashSet_Contains_hi2 is faster then HashSet_Contains_23
+	B. TreeSet_Contains_hi2 is faster then TreeSet_Contains_23
+	C. LinkedList_Contains_23 is faster then LinkedList_Contains_hi2
+	D. ChainedHashSet_Contains_hi2 is faster then ChainedHashSet_Contains_23
+	E. OpenHashSet_Contains_hi2 is faster then OpenHashSet_Contains_23
+	
+
+5.Discuss the results of the analysis in depth:
+	1. Account, in separate, for ChainedHashSet’s and OpenHashSet’s bad results for data1.txt:
+		For ChainedHashSet :
+				Since each word has the same hash code, they all reach the same cell in array
+				and than added to the linked list in that cell, so it seems that the bad result
+				is because the more words one tries to add to the linked list, 
+				it takes more time to add them.
+		For OpenHashedSet :
+				Since each word has the same hash code, they all reach the same cell in array
+				and then to the next cell(if the first is occupied) etc.
+				so the more words once try to add to the array, the "further" the method will
+				need to look and that increases the time substantially.
+						
+	2. Summarize the strengths and weaknesses of each of the data structures as reflected
+		by the results. Which would you use for which purposes?
+		1. Hash Set : is probably the best data structure i checked.
+				it's advantage is mostly seen when inserting words with the same
+				hash. it's contain method words faster on words that arren't in the array
+				then on words that are in the array.
+				
+				I'll probably use this data structure in any case. 
+				
+		2. TreeSet - the second best data structure i checked.
+			this structure is very good in each category but not the best.
+			the difference in adding word with the same hash and words that
+			distribute more evenly is close.
+			
+			HashSet is better in each category so i'll not use it.
+			
+		3. LinkedList - is averaged at most.
+			It has no real strength and it's compare method yield bad results 
+			and that is a major weakness.
+			
+			I will not use it in any case.
+			
+		4. ChainedHashSet - is also averaged.
+			It takes significantly more time to add a set of words with the same
+			hash code then adding words that should be distributed more or 
+			less uniformly in your hash table.
+			It's main strength is in its contain method where it finds best that words are not 
+			in the array.
+			
+			I'll probably will not use it but maybe when there aren't lots of word that needs
+			to be in the structure and the use of the method contain is massive.
+			
+		5. OpenHashSet - is pretty poor in most of the categories.
+				its major strength is when searching words that are inside the data structure.
+				
+			I'll probably will not use it but maybe when there aren't lots of word that needs
+			to be in the structure and the use of the method contain is massive.
+				
+				
+	3. How did your two implementations compare between themselves?
+		My implementation of ChainedHashSet is better then OpenHashSet in all of
+		the categories.
+	
+	4. How did your implementations compare to Java’s built in HashSet?
+		HashSet is better then my implementation in almost all the categorize.
+		TreeSet is better then OpenHashSet in almost all the categorize and 
+			the same or worst then ChainedHashSet(except from adding words with the 
+			same hash code to the structure).
+		LinkedList is worst then both of my implementation in almost all the categorize. 
+	
+	5. What results surprised you and which did you expect?
+		I expected HashSet to be the best (obviously).
+		I was'nt surprised from the results.
+		
+	6. If you implemented the modulo efficiently (appendix A), how significant was the speed-up?
+		It was very significant speed-up (almost twice as much in some cases) - 
+		It was more significant in OpenHashSet then in ChainedHashSet,
+		I believe that is the case since in ChainedHashSet when i get to a cell in the array
+		I stay there and in OpenHashSet I might need to move several times before I 
+		find a "good" cell and therefore the use of modulo is increase.
+	
+	
+About constants:
+			The constants that are used in more than one class (or could be used in the 
+			future) are declared in the class Constant.
+			I declared the rest of my (private) constant in the beginning of the class( 
+			SpaceShipFactory and DrunkerSpaceShip) before the constructor.
+			I know that in some cases it might be a contradiction to the namespace pollution principle
+			we've learned.
+			I do that so the code would be more easy to read and that it will be possible to 
+			reuse constant if in the future someone will expand the code and will want to use these constants.
+=============================
+=    Answers to questions   =
+=============================
+
